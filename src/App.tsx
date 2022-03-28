@@ -1,26 +1,55 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { Component } from 'react'
+import { Comment } from './components/Comment';
+import { CommentId, IComment } from './typings/comment.types'
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+// type MyProps = {
+//   message: string;
+// }
+
+type MyState = {
+  comments: IComment[]
+}
+
+const testComment: IComment = {
+  id: '1',
+  author: {
+    name: 'Hannah',
+    id: '2'
+  },
+  text: 'This is a test comment',
+  time: new Date(),
+}
+
+class App extends Component {
+	// constructor(props: MyProps) {
+  //   super(props);
+  // }
+
+  state: MyState = {
+    comments: []
+  }
+
+  componentDidMount() {
+    fetch('https://anark-1a4a7-default-rtdb.firebaseio.com/comments')
+    .then((response) => response.json())
+    .then(comments => {
+        this.setState({ comments });
+    });
+}
+
+  render() {
+    return (
+      <div>
+        <h2>Hello</h2>
+        <Comment id={testComment.id} commentData={testComment}/>
+        <ul>
+                {this.state.comments.map((comment) => (
+                    <li key={comment.id}>{comment.text}</li>
+                ))}
+            </ul>
+      </div>
+    )
+  }
 }
 
 export default App;
