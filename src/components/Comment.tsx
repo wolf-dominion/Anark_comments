@@ -1,11 +1,10 @@
 import { FC, useState } from 'react'
 import { CommentId, IComment } from '../typings/comment.types'
-// import { postReply } from './ApiActions';
 
 import '../App.css'
 
 export const Comment: FC<{ id: CommentId, commentData: IComment }> = (props) => {
-    const { id, commentData } = props
+    const { commentData } = props
     const { author, text } = commentData
 
     const [replyText, SetReplyText] = useState('')
@@ -15,7 +14,6 @@ export const Comment: FC<{ id: CommentId, commentData: IComment }> = (props) => 
 
     const replyHandler = (event: React.MouseEvent<HTMLButtonElement>) => {
         event.preventDefault();
-
         SetReplyButtonClicked(true)
     };
 
@@ -34,18 +32,19 @@ export const Comment: FC<{ id: CommentId, commentData: IComment }> = (props) => 
             text: replyText,
             time: new Date()
         }
-        // postReply(id, reply.text)
+        // postReply(id, reply.text) this is where the post request would go to save the reply to database
+        // for now it is just optimistically rendered
         SetReplyText('')
-        setReplies(oldArray => [...oldArray,reply])
+        setReplies(prevState => [...prevState,reply])
     };
     
     return (
         <div className='comment-container'>
-            <h2>{author.name.toUpperCase()}:</h2>
-            <span>{text}</span>
+            <span className='comment-item username'>{author.name.toUpperCase()}:</span>
+            <span className='comment-item'>{text}</span>
             {
                 <button 
-                    className='reply-button'
+                    className='reply-button comment-item'
                     onClick={replyHandler}
                 >
                     Reply
@@ -53,9 +52,18 @@ export const Comment: FC<{ id: CommentId, commentData: IComment }> = (props) => 
             }
             <span className='comment-text'></span>
             {
+                postButtonClicked && replies.length &&
+                replies.map(reply => {
+                    return <div key={reply.id} className='reply-container reply-text'>
+                        <span className='username'>{reply.author.name.toUpperCase()}:</span>
+                        <span>{reply.text}</span>
+                    </div>
+                })
+            }
+            {
                 replyButtonClicked &&
                 <div className='reply-container'>
-                    <span>NATHAN:</span>
+                    <span className='username'>NATHAN:</span>
                     <form className='form' onSubmit={postHandler}>
                         <button className='post-button' type="submit">Post</button>
                         <input
@@ -67,15 +75,6 @@ export const Comment: FC<{ id: CommentId, commentData: IComment }> = (props) => 
                         />
                     </form>
                 </div>
-            }
-            {
-                postButtonClicked && replies.length &&
-                replies.map(reply => {
-                    return <div key={reply.id} className='reply-container'>
-                        <span>{reply.author.name}</span>
-                        <span>{reply.text}</span>
-                    </div>
-                })
             }
         </div>
     )

@@ -1,6 +1,7 @@
 .comment-container {
   display: flex;
   flex-direction: column;
+  background-color: white;
 }
 
 .reply-button {
@@ -26,7 +27,9 @@
   color: white;
   padding-left: 10px;
   padding-right: 10px;
+  margin-top: -25px;
   margin-bottom: 10px;
+  font-family: serif;
 }
 
 .reply-container {
@@ -35,7 +38,6 @@
   padding-left: 50px;
   padding-right: 20px;
   background-color: rgb(238, 245, 251);
-  padding-top: 20px;
 }
 
 .input {
@@ -54,4 +56,19 @@
 .form {
   display: flex;
   flex-direction: column;
+}
+
+.comment-item {
+  padding-left: 20px;
+}
+
+.username {
+  font-weight: bold;
+  font-size: 17px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+.reply-text {
+  padding-bottom: 10px;
 }

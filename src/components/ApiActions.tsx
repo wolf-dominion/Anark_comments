@@ -1,12 +1,12 @@
-import { CommentId, IComment } from '../typings/comment.types'
+import { IComment } from '../typings/comment.types'
 const axios = require('axios').default;
 
 // These API functions are not complete!
 export const getComments = function() {
     axios.get('/comments.json')
-        .then((getResponse: string) => {
-        const comments = JSON.parse(getResponse).data as CommentId[];
-        console.log("comments: ", comments)
+        .then((getResponse: any) => {
+        const comments = getResponse.data as IComment[];
+        return comments
         })
         // .catch((err) => {});  
 }
